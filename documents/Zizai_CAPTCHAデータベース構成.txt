@@ -1,0 +1,22 @@
+--------------------------------------------------------------------------------
+
+  PHPアプリケーション用画像認証ライブラリ「Zizai CAPTCHA」設計案    ページ(2)
+
+--------------------------------------------------------------------------------
+
+_/_/_/_/ データベース _/_/_/_/
+
+`zizai_captcha_sessions`　認証画像生成・照合情報
+  `session_id` TEXT NOT NULL PRIMARY KEY BASE32エンコードにより生成される10桁のセッションID
+  `characters` TEXT NOT NULL 認証画像に表示される文字列
+  `random_seed` INTEGER NOT NULL 乱数のシード値
+  `generated_date_time` TEXT NOT NULL 生成日時(YYYY-MM-DD hh:mm:ss)
+
+  INDEX zizai_captcha_idx_1(`generated_date_time`)
+
+
+`zizai_captcha_attempt_logs`　認証失敗ログ
+  `ip_address` TEXT NOT NULL クライアントのIPアドレス
+  `date_time` TEXT NOT NULL 認証失敗日時(YYYY-MM-DD hh:mm:ss)
+
+  PRIMARY KEY(`date_time`,`ip_address`)

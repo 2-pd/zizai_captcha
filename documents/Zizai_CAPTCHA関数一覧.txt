@@ -1,0 +1,66 @@
+--------------------------------------------------------------------------------
+
+  PHPアプリケーション用画像認証ライブラリ「Zizai CAPTCHA」設計案    ページ(3)
+
+--------------------------------------------------------------------------------
+
+_/_/_/_/ 関数・定数まとめ _/_/_/_/
+
+■■■ main.php ■■■
+
+████ 定数 ████
+
+ZIZAI_CAPTCHA_ALPHANUMERIC
+　「0」。認証画像に英数字を使用する場合に指定する。
+
+ZIZAI_CAPTCHA_HIRAGANA
+　「1」。認証画像にひらがなを使用する場合に指定する。
+
+ZIZAI_CAPTCHA_KATAKANA
+　「2」。認証画像にカタカナを使用する場合に指定する。
+
+
+████ 関数・クラス ████
+
+==== zizai_captchaクラス関連 ====
+
+class zizai_captcha
+　メインのクラス。
+
+zizai_captcha::__construct($config_path = "config.json")
+　main.phpのある階層を基準にconfig_pathで指定された設定ファイルをロードし、SQLiteデータベースに接続する。
+　
+zizai_captcha::generate_id()
+　$scriptの用字系の文字$char_count個からなる認証文字列と乱数のシード値を生成したうえでランダムなセッションIDに紐付けてDBに保存し、そのセッションIDを返す。
+
+zizai_captcha::check($session_id, $characters)
+  $session_idに紐付けられた認証文字列と$charactersを比較し、等しければTRUE、等しくないか、$session_idが期限切れ、あるいは、ロックアウト中のIPアドレスからのアクセスならばFALSEを返す。
+  このとき、結果に関わらずIDは削除され、さらに、FALSEの場合は試行失敗ログがデータベースに追加される。
+  なお、アルファベットの大文字小文字、及び、英数字の全角半角の違いは無視される。
+　
+zizai_captcha::print_image($session_id)
+　$session_idに紐付けられた認証文字列とシード値から認証画像を生成し、そのバイナリを出力する。
+
+zizai_captcha::get_image_blob($session_id)
+　zizai_captcha::print_image($session_id)のバイナリを出力せずに返り値として返す。
+
+
+■■■ captcha.js ■■■
+
+zizai_captcha_generate_id()
+　サーバ上のgenerate_id.phpからAjaxにより新しいセッションIDを取得する。
+
+
+zizai_captcha_get_image_path(session_id)
+　セッションIDを認証画像のURLに変換して返す。
+
+
+zizai_captcha_reload_image(image_id, session_id_id = null)
+　新しい認証画像のURLを取得し、image_idで指定したIDを持つIMG要素のSRCを新しい認証画像のURLに差し替え、新しいセッションIDを返す。
+　session_id_idに文字列を指定した場合は、その文字列と同じIDを持つINPUT要素のVALUEを新しいセッションIDで上書きする。
+
+
+zizai_captcha_get_html(id_name = "zizai_captcha_id", characters_name = "zizai_captcha_characters")
+　フォーム用の認証画像とリロードボタンと文字入力欄とセッションID情報(非表示要素)をセットにしたHTMLを生成し、返す。
+　このとき、セッションID情報のINPUT要素のNAMEとIDにはid_nameが、文字入力欄のINPUT要素のNAMEとIDにはcharacters_nameが割り当てられる。
+　リロードボタンと文字入力欄の高さ及び幅はconfig.jsonの値から自動的に決定される。
