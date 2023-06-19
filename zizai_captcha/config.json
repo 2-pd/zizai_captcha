@@ -1,0 +1,10 @@
+{
+    "db_path" : "zizai_captcha.db",
+    "timeout_seconds" : 3600,
+    "lockout_seconds" : 2,
+    "image_height" : 48,
+    "char_count" : 5,
+    "script" : 0,
+    "fonts" : ["fonts/Kikakana23-Light.otf", "fonts/Kikakana23-Regular.otf", "fonts/Kikakana23-Medium.otf", "fonts/Kikakana23-Bold.otf"],
+    "colors" : [[255,255,255], [34,34,34]]
+}

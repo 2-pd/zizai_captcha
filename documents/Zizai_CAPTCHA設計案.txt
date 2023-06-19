@@ -30,6 +30,11 @@ zizai_captcha/
 └ zizai_captcha.db ・・・ライブラリのデータベースファイル
 └ config.json ・・・ライブラリの設定ファイル
 └ reload.png ・・・デフォルトのリロードボタンアイコン
+└ fonts ・・・フォントディレクトリ
+   └ Kikakana23-Light.otf
+   └ Kikakana23-Regular.otf
+   └ Kikakana23-Medium.otf
+   └ Kikakana23-Bold.otf
 
 
 _/_/_/_/ 設定ファイル _/_/_/_/
@@ -43,5 +48,5 @@ _/_/_/_/ 設定ファイル _/_/_/_/
     "char_count" : 認証画像に表示される文字数,
     "script" : 認証画像の文字に使用する用字系(0:英数字, 1:ひらがな, 2:カタカナ),
     "fonts" : 使用するフォントファイルのパス(配列で1つ以上指定、main.phpのある階層基準),
-    "colors" : 使用する色(配列で2つ指定)
+    "colors" : 使用する色(配列で2つ指定、各色は、[R,G,B]の形式で0〜255の整数値を指定)
 }
