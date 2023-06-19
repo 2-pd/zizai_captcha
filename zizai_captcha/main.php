@@ -63,7 +63,17 @@ class zizai_captcha {
         }
     }
     
+    private function delete_expired_session () {
+        $r1 = $this->db_obj->query("DELETE FROM `zizai_captcha_sessions` WHERE `generated_date_time` < '".date("Y-m-d H:i:s", time() - $this->config["timeout_seconds"])."'");
+        if($r1 === FALSE){
+            print "zizai_captcha::delete_expired_sessionのSQLクエリ1の実行に失敗しました。";
+            return FALSE;
+        }
+    }
+    
     function generate_id () {
+        $this->delete_expired_session();
+        
         $random_bin = pack("J", (mt_rand(0, 0x3FFFFFFF) << 20) + (microtime(TRUE) * 1000000 % 0x100000));
         
         $session_id = "";
@@ -92,12 +102,63 @@ class zizai_captcha {
         }
         
         $r1 = $this->db_obj->query("INSERT INTO `zizai_captcha_sessions`(`session_id`,`characters`,`random_seed`,`generated_date_time`) VALUES ('".$session_id."','".$characters."',".mt_rand().",'".date("Y-m-d H:i:s")."')");
-        if($r1 == FALSE){
+        if($r1 === FALSE){
             print "zizai_captcha::generate_idのSQLクエリ1の実行に失敗しました。";
             return FALSE;
         }
         
         return $session_id;
+    }
+    
+    function check($session_id, $characters) {
+        $this->delete_expired_session();
+        
+        $r1 = $this->db_obj->query("DELETE FROM `zizai_captcha_attempt_logs` WHERE `date_time` < '".date("Y-m-d H:i:s", time() - $this->config["lockout_seconds"])."'");
+        if($r1 === FALSE){
+            print "zizai_captcha::checkのSQLクエリ1の実行に失敗しました。";
+            return FALSE;
+        }
+        
+        $log_count = $this->db_obj->querySingle("SELECT COUNT(*) FROM `zizai_captcha_attempt_logs` WHERE `ip_address` = '".$_SERVER["REMOTE_ADDR"]."'");
+        if($log_count === FALSE){
+            print "zizai_captcha::checkのSQLクエリ2の実行に失敗しました。";
+            return FALSE;
+        }
+        
+        $session_id = $this->db_obj->escapeString($session_id);
+        
+        if ($log_count == 0){
+            $correct_characters = $this->db_obj->querySingle("SELECT `characters` FROM `zizai_captcha_sessions` WHERE `session_id` = '".$session_id."'");
+            if($correct_characters === FALSE){
+                print "zizai_captcha::checkのSQLクエリ3の実行に失敗しました。";
+                return FALSE;
+            }
+        }
+        
+        $r4 = $this->db_obj->query("DELETE FROM `zizai_captcha_sessions` WHERE `session_id` = '".$session_id."'");
+        if($r4 === FALSE){
+            print "zizai_captcha::checkのSQLクエリ4の実行に失敗しました。";
+            return FALSE;
+        }
+        
+        if ($log_count == 0) {
+            if ($this->config["script"] == ZIZAI_CAPTCHA_ALPHANUMERIC) {
+                $characters = strtoupper($characters);
+                $correct_characters = strtoupper($correct_characters);
+            }
+            
+            if ($characters === $correct_characters) {
+                return TRUE;
+            }
+        }
+        
+        $r5 = $this->db_obj->query("INSERT INTO `zizai_captcha_attempt_logs`(`ip_address`,`date_time`) VALUES ('".$_SERVER["REMOTE_ADDR"]."','".date("Y-m-d H:i:s")."')");
+        if($r5 === FALSE){
+            print "zizai_captcha::checkのSQLクエリ5の実行に失敗しました。";
+            return FALSE;
+        }
+        
+        return FALSE;
     }
 }
 ?>
