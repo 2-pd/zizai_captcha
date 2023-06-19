@@ -200,20 +200,22 @@ class zizai_captcha {
     private function print_image_from_data ($session_data) {
         $this->xs_srand($session_data["random_seed"]);
         
-        $img_w = $this->config["image_height"] * $this->config["char_count"] * 2;
-        $img_h = $this->config["image_height"] * 2;
+        $img_w = $this->config["image_height"] * $this->config["char_count"];
+        $img_h = $this->config["image_height"];
+        $img_w2 = $img_w * 2;
+        $img_h2 = $img_h * 2;
         
-        $char_img = imagecreatetruecolor($img_h * 3, $img_h * 3);
+        $char_img = imagecreatetruecolor($img_h2 * 3, $img_h2 * 3);
         imageantialias($char_img, TRUE);
         imageaffine($char_img, array(1, 0, 0, 1, 0, 0));//imageaffineは初回実行時にエラーとなることがあるため
         
-        $font_size = round($img_h * 2 / 5);
-        $base_x = round($img_h * 13 / 10);
-        $base_y = round($img_h * 17 / 10);
+        $font_size = round($img_h2 * 2 / 5);
+        $base_x = round($img_h2 * 13 / 10);
+        $base_y = round($img_h2 * 17 / 10);
         
         $imgs = array();
         for ($cnt = 0; $cnt < 2; $cnt++) {
-            $imgs[$cnt] = imagecreatetruecolor($img_w, $img_h);
+            $imgs[$cnt] = imagecreatetruecolor($img_w2, $img_h2);
             
             $index_1 = $cnt % 2;
             $index_2 = ($cnt + 1) % 2;
@@ -228,11 +230,11 @@ class zizai_captcha {
             }
             
             for ($cnt_2 = 0; $cnt_2 < $this->config["char_count"]; $cnt_2++) {
-                imagefilledrectangle($char_img, 0, 0, $img_h * 3, $img_h * 3, $char_bg_color);
+                imagefilledrectangle($char_img, 0, 0, $img_h2 * 3, $img_h2 * 3, $char_bg_color);
                 imagettftext($char_img, $font_size, $this->xs_rand(-30, 30), $base_x, $base_y, $font_color, $this->config_dir.$this->config["fonts"][$this->xs_rand(0, count($this->config["fonts"]) - 1)], mb_substr($session_data["characters"], $cnt_2, 1));
                 $char_img_affine = imageaffine($char_img, array($this->xs_rand(76, 125) / 100, $this->xs_rand(-40, 40) / 100, $this->xs_rand(-40, 40) / 100, $this->xs_rand(76, 125) / 100, 0, 0));
                 
-                imagecopy($imgs[$cnt], $char_img_affine, $img_h * $cnt_2, 0, round((imagesx($char_img_affine) - $img_h) / 2), round((imagesy($char_img_affine) - $img_h) / 2), $img_h, $img_h);
+                imagecopy($imgs[$cnt], $char_img_affine, $img_h2 * $cnt_2, 0, round((imagesx($char_img_affine) - $img_h2) / 2 + $img_h2 * $this->xs_rand(-10, 10) / 100), round((imagesy($char_img_affine) - $img_h2) / 2 + $img_h2 * $this->xs_rand(-10, 10) / 100), $img_h2, $img_h2);
             }
         }
         
@@ -253,11 +255,14 @@ class zizai_captcha {
         }
         
         imagecolortransparent($imgs[$index_low], $transparent_color);
-        imagefilledpolygon($imgs[$index_low], array($img_w, 0, 0, 0, 0, round($img_h * $this->xs_rand(21, 80) / 100), $img_w, round($img_h * $this->xs_rand(21, 80) / 100)), $transparent_color);
+        imagefilledpolygon($imgs[$index_low], array($img_w2, 0, 0, 0, 0, round($img_h2 * $this->xs_rand(21, 80) / 100), $img_w2, round($img_h2 * $this->xs_rand(21, 80) / 100)), $transparent_color);
         
-        imagecopy($imgs[$index_up], $imgs[$index_low], 0, 0, 0, 0, $img_w, $img_h);
+        imagecopy($imgs[$index_up], $imgs[$index_low], 0, 0, 0, 0, $img_w2, $img_h2);
         
-        imagewebp(imagescale($imgs[$index_up], $img_w / 2, $this->config["image_height"], IMG_BILINEAR_FIXED));
+        $img = imagecreatetruecolor($img_w, $img_h);
+        imagecopyresampled($img, $imgs[$index_up], 0, 0, 0, 0, $img_w, $img_h, $img_w2, $img_h2);
+        
+        imagewebp($img);
         
         return TRUE;
     }
