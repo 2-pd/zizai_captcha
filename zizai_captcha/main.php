@@ -280,4 +280,18 @@ class zizai_captcha {
             return FALSE;
         }
     }
+    
+    function get_image_blob ($session_id) {
+        $session_data = $this->get_session_data($session_id);
+        
+        if (!empty($session_data)) {
+            ob_start();
+            
+            $this->print_image_from_data($session_data);
+            
+            return ob_get_clean();
+        } else {
+            return FALSE;
+        }
+    }
 }
