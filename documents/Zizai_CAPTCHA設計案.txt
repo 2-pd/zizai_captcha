@@ -41,7 +41,7 @@ _/_/_/_/ 設定ファイル _/_/_/_/
 
 ■■■ config.json ■■■
 {
-    "db_path" : SQLiteデータベースファイルのパス,
+    "db_path" : SQLiteデータベースファイルのパス(config.jsonのある階層基準),
     "timeout_seconds" : 認証画像の有効時間(秒),
     "lockout_seconds" : 認証に失敗したIPアドレスのロックアウト時間(秒),
     "image_height" : 認証画像の高さ(ピクセル),

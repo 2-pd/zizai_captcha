@@ -10,6 +10,9 @@ _/_/_/_/ 関数・定数まとめ _/_/_/_/
 
 ████ 定数 ████
 
+ZIZAI_CAPTCHA_BASE32_TABLE
+　セッションIDをBASE32エンコードするために使用する配列。
+
 ZIZAI_CAPTCHA_ALPHANUMERIC
 　「0」。認証画像に英数字を使用する場合に指定する。
 
