@@ -24,6 +24,10 @@ class zizai_captcha {
     private $config;
     private $db_obj;
     
+    private $config_dir;
+    
+    private $random_seed;
+    
     function __construct ($config_path = "config.json") {
         $config_absolute_path = __DIR__."/".$config_path;
         
@@ -34,7 +38,9 @@ class zizai_captcha {
             return FALSE;
         }
         
-        $this->db_obj = new SQLite3(dirname($config_absolute_path)."/".$this->config["db_path"]);
+        $this->config_dir = dirname($config_absolute_path)."/";
+        
+        $this->db_obj = new SQLite3($this->config_dir.$this->config["db_path"]);
         
         $this->db_obj->busyTimeout(5000);
     }
@@ -61,6 +67,26 @@ class zizai_captcha {
         } else {
             return $bin_int[1] & (2**$length - 1);
         }
+    }
+    
+    private function xs_srand ($random_seed) {
+        $this->random_seed = $random_seed;
+    }
+    
+    private function xs_rand ($min, $max) {
+        $r = $this->random_seed;
+        
+        $r = $r ^ ($r << 9);
+        $r = $r ^ ($r >> 21);
+        $r = $r ^ ($r << 11);
+        
+        $this->random_seed = $r;
+        
+        return abs($r) % ($max - $min + 1) + $min;
+    }
+    
+    private function xs_srand_snapshot () {
+        return $this->random_seed;
     }
     
     private function delete_expired_session () {
@@ -110,7 +136,7 @@ class zizai_captcha {
         return $session_id;
     }
     
-    function check($session_id, $characters) {
+    function check ($session_id, $characters) {
         $this->delete_expired_session();
         
         $r1 = $this->db_obj->query("DELETE FROM `zizai_captcha_attempt_logs` WHERE `date_time` < '".date("Y-m-d H:i:s", time() - $this->config["lockout_seconds"])."'");
@@ -160,5 +186,93 @@ class zizai_captcha {
         
         return FALSE;
     }
+    
+    private function get_session_data ($session_id) {
+        $r1 = $this->db_obj->query("SELECT `characters`,`random_seed` FROM `zizai_captcha_sessions` WHERE `session_id` = '".$this->db_obj->escapeString($session_id)."'");
+        if($r1 === FALSE){
+            print "zizai_captcha::print_imageのSQLクエリ1の実行に失敗しました。";
+            return FALSE;
+        }
+        
+        return $r1->fetchArray(SQLITE3_ASSOC);
+    }
+    
+    private function print_image_from_data ($session_data) {
+        $this->xs_srand($session_data["random_seed"]);
+        
+        $img_w = $this->config["image_height"] * $this->config["char_count"] * 2;
+        $img_h = $this->config["image_height"] * 2;
+        
+        $char_img = imagecreatetruecolor($img_h * 3, $img_h * 3);
+        imageantialias($char_img, TRUE);
+        imageaffine($char_img, array(1, 0, 0, 1, 0, 0));//imageaffineは初回実行時にエラーとなることがあるため
+        
+        $font_size = round($img_h * 2 / 5);
+        $base_x = round($img_h * 13 / 10);
+        $base_y = round($img_h * 17 / 10);
+        
+        $imgs = array();
+        for ($cnt = 0; $cnt < 2; $cnt++) {
+            $imgs[$cnt] = imagecreatetruecolor($img_w, $img_h);
+            
+            $index_1 = $cnt % 2;
+            $index_2 = ($cnt + 1) % 2;
+            
+            $char_bg_color = imagecolorallocate($char_img, $this->config["colors"][$index_1][0], $this->config["colors"][$index_1][1], $this->config["colors"][$index_1 % 2][2]);
+            $font_color = imagecolorallocate($char_img, $this->config["colors"][$index_2][0], $this->config["colors"][$index_2][1], $this->config["colors"][$index_2][2]);
+            
+            if ($cnt == 0) {
+                $seed = $this->xs_srand_snapshot();
+            } else {
+                $this->xs_srand($seed);
+            }
+            
+            for ($cnt_2 = 0; $cnt_2 < $this->config["char_count"]; $cnt_2++) {
+                imagefilledrectangle($char_img, 0, 0, $img_h * 3, $img_h * 3, $char_bg_color);
+                imagettftext($char_img, $font_size, $this->xs_rand(-30, 30), $base_x, $base_y, $font_color, $this->config_dir.$this->config["fonts"][$this->xs_rand(0, count($this->config["fonts"]) - 1)], mb_substr($session_data["characters"], $cnt_2, 1));
+                $char_img_affine = imageaffine($char_img, array($this->xs_rand(76, 125) / 100, $this->xs_rand(-40, 40) / 100, $this->xs_rand(-40, 40) / 100, $this->xs_rand(76, 125) / 100, 0, 0));
+                
+                imagecopy($imgs[$cnt], $char_img_affine, $img_h * $cnt_2, 0, round((imagesx($char_img_affine) - $img_h) / 2), round((imagesy($char_img_affine) - $img_h) / 2), $img_h, $img_h);
+            }
+        }
+        
+        if ($this->xs_rand(0, 1)) {
+            $index_up = 0;
+            $index_low = 1;
+        } else {
+            $index_up = 1;
+            $index_low = 0;
+        }
+        
+        if (!(($this->config["colors"][0][0] == 0 && $this->config["colors"][0][1] == 255 && $this->config["colors"][0][2] == 0) || ($this->config["colors"][1][0] == 0 && $this->config["colors"][1][1] == 255 && $this->config["colors"][1][2] == 0))) {
+            $transparent_color = imagecolorallocate($imgs[$index_low], 0, 255, 0);
+        } elseif (!(($this->config["colors"][0][0] == 0 && $this->config["colors"][0][1] == 0 && $this->config["colors"][0][2] == 255) || ($this->config["colors"][1][0] == 0 && $this->config["colors"][1][1] == 0 && $this->config["colors"][1][2] == 255))) {
+            $transparent_color = imagecolorallocate($imgs[$index_low], 0, 0, 255);
+        } else {
+            $transparent_color = imagecolorallocate($imgs[$index_low], 255, 0, 0);
+        }
+        
+        imagecolortransparent($imgs[$index_low], $transparent_color);
+        imagefilledpolygon($imgs[$index_low], array($img_w, 0, 0, 0, 0, round($img_h * $this->xs_rand(21, 80) / 100), $img_w, round($img_h * $this->xs_rand(21, 80) / 100)), $transparent_color);
+        
+        imagecopy($imgs[$index_up], $imgs[$index_low], 0, 0, 0, 0, $img_w, $img_h);
+        
+        imagewebp(imagescale($imgs[$index_up], $img_w / 2, $this->config["image_height"], IMG_BILINEAR_FIXED));
+        
+        return TRUE;
+    }
+    
+    function print_image ($session_id) {
+        $session_data = $this->get_session_data($session_id);
+        
+        if (!empty($session_data)) {
+            header("Content-Type: image/webp");
+            
+            return $this->print_image_from_data($session_data);
+        } else {
+            header("HTTP/1.1 404 Not Found");
+            
+            return FALSE;
+        }
+    }
 }
-?>
