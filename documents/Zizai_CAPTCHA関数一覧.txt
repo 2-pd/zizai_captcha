@@ -64,8 +64,10 @@ ZIZAI_CAPTCHA_IMAGE_PATH
 
 ████ 関数・クラス ████
 
-zizai_captcha_get_id()
-　サーバ上のgenerate_id.phpからAjaxにより新しいセッションIDを取得する。
+zizai_captcha_get_id(callback_func)
+　サーバ上のZIZAI_CAPTCHA_GENERATE_ID_ENDPOINTからAjaxにより新しいセッションIDを含むデータを取得する。
+　取得したデータはsession_id、image_width、image_heightを含むオブジェクトとしてコールバック関数callback_funcの第1引数に渡される。
+　データの取得に失敗した場合にはコールバック関数にfalseが渡される。
 
 
 zizai_captcha_get_image_path(session_id)
