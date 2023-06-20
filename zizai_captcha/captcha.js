@@ -33,3 +33,21 @@ function zizai_captcha_get_id (callback_func) {
 function zizai_captcha_get_image_path (session_id) {
     return zizai_captcha_dir + ZIZAI_CAPTCHA_IMAGE_PATH + "/" + session_id;
 }
+
+var zizai_captcha_image_id = "";
+var zizai_captcha_session_id_id = null;
+
+function zizai_captcha_reload_image_callback (data) {
+    document.getElementById(zizai_captcha_image_id).src = zizai_captcha_get_image_path(data.session_id);
+    
+    if (zizai_captcha_session_id_id !== null) {
+        document.getElementById(zizai_captcha_session_id_id).value = data.session_id;
+    }
+}
+
+function zizai_captcha_reload_image (image_id, session_id_id = null) {
+    zizai_captcha_image_id = image_id;
+    zizai_captcha_session_id_id = session_id_id;
+    
+    zizai_captcha_get_id(zizai_captcha_reload_image_callback);
+}

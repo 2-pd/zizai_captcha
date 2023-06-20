@@ -75,8 +75,9 @@ zizai_captcha_get_image_path(session_id)
 
 
 zizai_captcha_reload_image(image_id, session_id_id = null)
-　新しい認証画像のURLを取得し、image_idで指定したIDを持つIMG要素のSRCを新しい認証画像のURLに差し替え、新しいセッションIDを返す。
+　新しい認証画像のURLを取得し、image_idで指定したIDを持つIMG要素のSRCを新しい認証画像のURLに差し替える。
 　session_id_idに文字列を指定した場合は、その文字列と同じIDを持つINPUT要素のVALUEを新しいセッションIDで上書きする。
+　なお、処理は非同期的に実行されるため、この関数の実行直後に差し替え対象のIMG要素やINPUT要素から値を取得しても古い値のままの場合がある。
 
 
 zizai_captcha_get_html(id_name = "zizai_captcha_id", characters_name = "zizai_captcha_characters")
