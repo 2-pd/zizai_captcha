@@ -70,7 +70,7 @@ function zizai_captcha_get_html_callback (data, args) {
     
     args[0](`
 <input type="hidden" name="${args[1]}" id="${args[1]}" value="${data.session_id}">
-<img src="${image_path}" alt="" id="zizai_captcha_image" style="vertical-align: text-bottom;"><button onclick="zizai_captcha_reload_image('zizai_captcha_image', '${args[1]}');" style="box-sizing: border-box; width: ${data.image_height}px; height: ${data.image_height}px; background-color: ${args[3]}; background-image: url('${button_image}'); background-size: cover; border: none; margin-left: 5px; vertical-align: text-bottom; cursor: pointer;"></button><br>
+<img src="${image_path}" alt="" id="zizai_captcha_image" style="vertical-align: text-bottom;"><button type="button" onclick="zizai_captcha_reload_image('zizai_captcha_image', '${args[1]}');" style="box-sizing: border-box; width: ${data.image_height}px; height: ${data.image_height}px; background-color: ${args[3]}; background-image: url('${button_image}'); background-size: cover; border: none; margin-left: 5px; vertical-align: text-bottom; cursor: pointer;"></button><br>
 <input type="text" name="${args[2]}" id="${args[2]}" style="box-sizing: border-box; width: ${data.image_width}px; height: ${data.image_height}px; font-size: ${input_font_size}px; letter-spacing: 0.5em; text-align: center;">
 `);
 }
