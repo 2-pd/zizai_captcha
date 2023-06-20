@@ -53,6 +53,17 @@ zizai_captcha::get_config_values()
 
 ■■■ captcha.js ■■■
 
+████ 定数 ████
+
+ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT
+　zizai_captcha_get_idがアクセスするエンドポイントファイルの相対パス(通常は「generate_id.php」)
+
+ZIZAI_CAPTCHA_IMAGE_PATH
+　認証画像を出力するPHPファイルの相対パス(通常は「image.php」)
+
+
+████ 関数・クラス ████
+
 zizai_captcha_get_id()
 　サーバ上のgenerate_id.phpからAjaxにより新しいセッションIDを取得する。
 

@@ -24,7 +24,7 @@ _/_/_/_/ ディレクトリ構造 _/_/_/_/
 
 zizai_captcha/
 └ main.php ・・・ライブラリのメインファイル
-└ captcha.php ・・・認証画像出力用のファイル
+└ image.php ・・・認証画像出力用のファイル
 └ generate_id.php ・・・認証画像の後読み処理用のファイル
 └ captcha.js ・・・認証画像の表示処理用のJavascriptファイル
 └ zizai_captcha.db ・・・ライブラリのデータベースファイル
