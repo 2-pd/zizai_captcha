@@ -30,15 +30,15 @@
      inkscape:document-units="px"
      showgrid="false"
      units="px"
-     inkscape:zoom="0.25764062"
-     inkscape:cx="950.937"
-     inkscape:cy="539.5112"
+     inkscape:zoom="0.51528124"
+     inkscape:cx="950.93701"
+     inkscape:cy="502.63813"
      inkscape:window-width="1920"
      inkscape:window-height="1051"
      inkscape:window-x="1920"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      inkscape:showpageshadow="2"
      inkscape:deskcolor="#d1d1d1" />
   <defs
@@ -70,7 +70,7 @@
        inkscape:label="Drop Shadow"
        id="filter10503"
        x="-0.18267717"
-       y="-0.15658044"
+       y="-0.15658043"
        width="1.3653543"
        height="1.3131609">
       <feFlood
@@ -234,11 +234,12 @@
     <path
        id="path2825"
        style="fill:#eeeeee;fill-opacity:1;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter10503)"
-       d="M 87.3125,29.104246 A 39.6875,39.6875 0 0 0 47.625,68.791746 V 174.62507 a 39.6875,39.6875 0 0 0 39.6875,39.6875 h 79.375 a 39.6875,39.6875 0 0 0 39.6875,-39.6875 V 95.250073 A 39.6875,39.6875 0 0 0 166.6875,55.56258 H 100.54166 V 29.355394 Z" />
+       d="M 87.312502 29.104167 C 65.393745 29.104167 47.625001 46.872911 47.625001 68.791668 L 47.625001 174.625 C 47.625001 196.54376 65.393745 214.3125 87.312502 214.3125 L 166.6875 214.3125 C 188.60626 214.3125 206.375 196.54376 206.375 174.625 L 206.375 95.250002 C 206.375 73.331248 188.60626 55.562501 166.6875 55.562501 L 108.47917 55.562501 A 7.9375 7.9375 0 0 1 100.54167 47.625001 L 100.54167 37.041667 C 100.54167 32.657911 96.987925 29.104166 92.604168 29.104167 L 87.312502 29.104167 z " />
     <path
        id="path2825-2"
        style="fill:url(#linearGradient6218);fill-opacity:1;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
-       d="M 194.7509,67.186677 59.249097,202.68848 A 39.6875,39.6875 0 0 0 87.3125,214.31257 h 79.375 a 39.6875,39.6875 0 0 0 39.6875,-39.6875 V 95.250073 A 39.6875,39.6875 0 0 0 194.7509,67.186677 Z" />
+       d="M 194.7509,67.186677 59.249097,202.68848 c 7.442893,7.44283 17.537604,11.62409 28.063403,11.62409 h 79.375 c 21.9188,0 39.6875,-17.7687 39.6875,-39.6875 V 95.250073 c 0,-10.525798 -4.18126,-20.620506 -11.6241,-28.063396 z"
+       sodipodi:nodetypes="ccssssc" />
     <circle
        style="display:inline;fill:#ffffff;fill-opacity:1;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter12015-8)"
        id="path8640-1"
