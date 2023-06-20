@@ -3,7 +3,7 @@ define("ZIZAI_CAPTCHA_CONFIG_PATH", "config.json");
 
 include "main.php";
 
-$zc = new zizai_captcha();
+$zc = new zizai_captcha(ZIZAI_CAPTCHA_CONFIG_PATH);
 
 if (!empty($_SERVER["PATH_INFO"])) {
     $zc->print_image(substr($_SERVER["PATH_INFO"], 1, 10));
