@@ -29,12 +29,14 @@ zizai_captcha/
 └ captcha.js ・・・認証画像の表示処理用のJavascriptファイル
 └ zizai_captcha.db ・・・ライブラリのデータベースファイル
 └ config.json ・・・ライブラリの設定ファイル
-└ reload.png ・・・デフォルトのリロードボタンアイコン
 └ fonts ・・・フォントディレクトリ
    └ Kikakana23-Light.otf
    └ Kikakana23-Regular.otf
    └ Kikakana23-Medium.otf
    └ Kikakana23-Bold.otf
+└ icons ・・・デフォルトのリロードボタンアイコン
+   └ reload_bk.webp ・・・デフォルトのリロードボタンアイコン(黒)
+   └ reload_wh.webp ・・・デフォルトのリロードボタンアイコン(白)
 
 
 _/_/_/_/ 設定ファイル _/_/_/_/
