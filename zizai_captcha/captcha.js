@@ -29,3 +29,7 @@ function zizai_captcha_get_id (callback_func) {
     request_obj.timeout = 10000;
     request_obj.send();
 }
+
+function zizai_captcha_get_image_path (session_id) {
+    return zizai_captcha_dir + ZIZAI_CAPTCHA_IMAGE_PATH + "/" + session_id;
+}
