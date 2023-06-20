@@ -294,4 +294,8 @@ class zizai_captcha {
             return FALSE;
         }
     }
+    
+    function get_config_values () {
+        return $this->config;
+    }
 }

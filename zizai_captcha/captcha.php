@@ -1,4 +1,6 @@
 <?php
+define("ZIZAI_CAPTCHA_CONFIG_PATH", "config.json");
+
 include "main.php";
 
 $zc = new zizai_captcha();

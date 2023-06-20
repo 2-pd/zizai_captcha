@@ -47,6 +47,9 @@ zizai_captcha::print_image($session_id)
 zizai_captcha::get_image_blob($session_id)
 　zizai_captcha::print_image($session_id)のバイナリを出力せずに返り値として返す。
 
+zizai_captcha::get_config_values()
+　config.jsonの設定値を連想配列で返す。
+
 
 ■■■ captcha.js ■■■
 
