@@ -53,7 +53,7 @@ zizai_captcha::get_config_values()
 
 ■■■ captcha.js ■■■
 
-zizai_captcha_generate_id()
+zizai_captcha_get_id()
 　サーバ上のgenerate_id.phpからAjaxにより新しいセッションIDを取得する。
 
 
