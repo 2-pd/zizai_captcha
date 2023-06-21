@@ -24,24 +24,31 @@ _/_/_/_/ ディレクトリ構造 _/_/_/_/
 
 zizai_captcha/
 └ main.php ・・・ライブラリのメインファイル
-└ captcha.php ・・・認証画像出力用のファイル
+└ image.php ・・・認証画像出力用のファイル
 └ generate_id.php ・・・認証画像の後読み処理用のファイル
 └ captcha.js ・・・認証画像の表示処理用のJavascriptファイル
 └ zizai_captcha.db ・・・ライブラリのデータベースファイル
 └ config.json ・・・ライブラリの設定ファイル
-└ reload.png ・・・デフォルトのリロードボタンアイコン
+└ fonts ・・・フォントディレクトリ
+   └ Kikakana23-Light.otf
+   └ Kikakana23-Regular.otf
+   └ Kikakana23-Medium.otf
+   └ Kikakana23-Bold.otf
+└ icons ・・・デフォルトのリロードボタンアイコン
+   └ reload_bk.webp ・・・デフォルトのリロードボタンアイコン(黒)
+   └ reload_wh.webp ・・・デフォルトのリロードボタンアイコン(白)
 
 
 _/_/_/_/ 設定ファイル _/_/_/_/
 
 ■■■ config.json ■■■
 {
-    "db_path" : SQLiteデータベースファイルのパス,
+    "db_path" : SQLiteデータベースファイルのパス(config.jsonのある階層基準),
     "timeout_seconds" : 認証画像の有効時間(秒),
     "lockout_seconds" : 認証に失敗したIPアドレスのロックアウト時間(秒),
     "image_height" : 認証画像の高さ(ピクセル),
     "char_count" : 認証画像に表示される文字数,
     "script" : 認証画像の文字に使用する用字系(0:英数字, 1:ひらがな, 2:カタカナ),
-    "fonts" : 使用するフォントファイルのパス(配列で1つ以上指定、main.phpのある階層基準),
-    "colors" : 使用する色(配列で2つ指定)
+    "fonts" : 使用するフォントファイルのパス(配列で1つ以上指定、config.jsonのある階層基準),
+    "colors" : 使用する色(配列で2つ指定、各色は、[R,G,B]の形式で0〜255の整数値を指定)
 }

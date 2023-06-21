@@ -10,6 +10,9 @@ _/_/_/_/ 関数・定数まとめ _/_/_/_/
 
 ████ 定数 ████
 
+ZIZAI_CAPTCHA_BASE32_TABLE
+　セッションIDをBASE32エンコードするために使用する配列。
+
 ZIZAI_CAPTCHA_ALPHANUMERIC
 　「0」。認証画像に英数字を使用する場合に指定する。
 
@@ -44,11 +47,33 @@ zizai_captcha::print_image($session_id)
 zizai_captcha::get_image_blob($session_id)
 　zizai_captcha::print_image($session_id)のバイナリを出力せずに返り値として返す。
 
+zizai_captcha::get_config_values()
+　config.jsonの設定値を連想配列で返す。
+
 
 ■■■ captcha.js ■■■
 
-zizai_captcha_generate_id()
-　サーバ上のgenerate_id.phpからAjaxにより新しいセッションIDを取得する。
+████ 定数 ████
+
+ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT
+　zizai_captcha_get_idがアクセスするエンドポイントファイルの相対パス(通常は「generate_id.php」)
+
+ZIZAI_CAPTCHA_IMAGE_PATH
+　認証画像を出力するPHPファイルの相対パス(通常は「image.php」)
+
+ZIZAI_CAPTCHA_RELOAD_IMAGE_DARK
+　zizai_captcha_get_htmlが出力する再読み込みボタンの黒いアイコン画像(通常は「icons/reload_bk.webp」)
+
+ZIZAI_CAPTCHA_RELOAD_IMAGE_LIGHT
+　zizai_captcha_get_htmlが出力する再読み込みボタンの白いアイコン画像(通常は「icons/reload_wh.webp"」)
+
+
+████ 関数・クラス ████
+
+zizai_captcha_get_id(callback_func)
+　サーバ上のZIZAI_CAPTCHA_GENERATE_ID_ENDPOINTからAjaxにより新しいセッションIDを含むデータを取得する。
+　取得したデータはsession_id、image_width、image_heightを含むオブジェクトとしてコールバック関数callback_funcの第1引数に渡される。
+　データの取得に失敗した場合にはコールバック関数にfalseが渡される。
 
 
 zizai_captcha_get_image_path(session_id)
@@ -56,11 +81,12 @@ zizai_captcha_get_image_path(session_id)
 
 
 zizai_captcha_reload_image(image_id, session_id_id = null)
-　新しい認証画像のURLを取得し、image_idで指定したIDを持つIMG要素のSRCを新しい認証画像のURLに差し替え、新しいセッションIDを返す。
+　新しい認証画像のURLを取得し、image_idで指定したIDを持つIMG要素のSRCを新しい認証画像のURLに差し替える。
 　session_id_idに文字列を指定した場合は、その文字列と同じIDを持つINPUT要素のVALUEを新しいセッションIDで上書きする。
+　なお、処理は非同期的に実行されるため、この関数の実行直後に差し替え対象のIMG要素やINPUT要素から値を取得しても古い値のままの場合がある。
 
 
-zizai_captcha_get_html(id_name = "zizai_captcha_id", characters_name = "zizai_captcha_characters")
-　フォーム用の認証画像とリロードボタンと文字入力欄とセッションID情報(非表示要素)をセットにしたHTMLを生成し、返す。
+zizai_captcha_get_html(callback_func, button_color = "#dddddd", id_name = "zizai_captcha_id", characters_name = "zizai_captcha_characters")
+　フォーム用の認証画像とリロードボタンと文字入力欄とセッションID情報(非表示要素)をセットにしたHTMLを生成し、コールバック関数callback_funcの第1引数に渡す。
 　このとき、セッションID情報のINPUT要素のNAMEとIDにはid_nameが、文字入力欄のINPUT要素のNAMEとIDにはcharacters_nameが割り当てられる。
-　リロードボタンと文字入力欄の高さ及び幅はconfig.jsonの値から自動的に決定される。
+　リロードボタンと文字入力欄の高さ及び幅はconfig.jsonの値から自動的に決定される。ボタン及の色はbutton_colorで指定できるが、この値は16進数6桁表記に限定される。
