@@ -1,7 +1,7 @@
 <?php
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
  *
- *  Zizai CAPTCHA 23.06-1
+ *  Zizai CAPTCHA 23.06-2
  *
  *_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
  *
@@ -167,7 +167,7 @@ class zizai_captcha {
             return FALSE;
         }
         
-        if ($log_count == 0) {
+        if ($log_count == 0 && !empty($correct_characters)) {
             if ($this->config["script"] == ZIZAI_CAPTCHA_ALPHANUMERIC) {
                 $characters = strtoupper($characters);
                 $correct_characters = strtoupper($correct_characters);
