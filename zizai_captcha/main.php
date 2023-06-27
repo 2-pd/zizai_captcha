@@ -1,7 +1,7 @@
 <?php
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
  *
- *  Zizai CAPTCHA 23.06-1
+ *  Zizai CAPTCHA 23.06-2
  *
  *_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
  *
@@ -10,7 +10,7 @@
  *   このソフトウェアは、無権利創作宣言に基づき著作権放棄されています。
  *   営利・非営利を問わず、自由にご利用いただくことが可能です。
  *
- *    http://www.2pd.jp/license/
+ *    https://www.2pd.jp/license/
  *
 */
 
@@ -167,7 +167,7 @@ class zizai_captcha {
             return FALSE;
         }
         
-        if ($log_count == 0) {
+        if ($log_count == 0 && !empty($correct_characters)) {
             if ($this->config["script"] == ZIZAI_CAPTCHA_ALPHANUMERIC) {
                 $characters = strtoupper($characters);
                 $correct_characters = strtoupper($correct_characters);
