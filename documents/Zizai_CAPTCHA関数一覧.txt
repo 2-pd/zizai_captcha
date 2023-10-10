@@ -51,6 +51,12 @@ zizai_captcha::get_config_values()
 　config.jsonの設定値を連想配列で返す。
 
 
+■■■ setup.php ■■■
+
+zizai_captcha_setup_db($config_path = "config.json")
+  Zizai CAPTCHAが使用する空のデータベースファイルを作成する。
+
+
 ■■■ captcha.js ■■■
 
 ████ 定数 ████
