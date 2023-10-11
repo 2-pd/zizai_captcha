@@ -26,6 +26,7 @@ zizai_captcha/
 └ main.php ・・・ライブラリのメインファイル
 └ image.php ・・・認証画像出力用のファイル
 └ generate_id.php ・・・認証画像の後読み処理用のファイル
+└ setup.php ・・・初期設定処理用のファイル
 └ captcha.js ・・・認証画像の表示処理用のJavascriptファイル
 └ zizai_captcha.db ・・・ライブラリのデータベースファイル
 └ config.json ・・・ライブラリの設定ファイル
