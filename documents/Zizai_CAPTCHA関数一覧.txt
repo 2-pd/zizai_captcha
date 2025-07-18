@@ -11,7 +11,7 @@ _/_/_/_/ 関数・定数まとめ _/_/_/_/
 ████ 定数 ████
 
 ZIZAI_CAPTCHA_BASE32_TABLE
-　セッションIDをBASE32エンコードするために使用する配列。
+　セッションIDをBase32エンコードするために使用する配列。
 
 ZIZAI_CAPTCHA_ALPHANUMERIC
 　「0」。認証画像に英数字を使用する場合に指定する。
@@ -42,7 +42,7 @@ zizai_captcha::check($session_id, $characters)
   なお、アルファベットの大文字小文字、及び、英数字の全角半角の違いは無視される。
 　
 zizai_captcha::print_image($session_id)
-　$session_idに紐付けられた認証文字列とシード値から認証画像を生成し、そのバイナリを出力する。
+　$session_idに紐付けられた認証文字列とシード値からWebP形式の認証画像を生成し、そのバイナリを出力する。
 
 zizai_captcha::get_image_blob($session_id)
 　zizai_captcha::print_image($session_id)のバイナリを出力せずに返り値として返す。
@@ -62,16 +62,16 @@ zizai_captcha_setup_db($config_path = "config.json")
 ████ 定数 ████
 
 ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT
-　zizai_captcha_get_idがアクセスするエンドポイントファイルの相対パス(通常は「generate_id.php」)
+　zizai_captcha_get_idがアクセスするエンドポイントファイルのパス(通常は「generate_id.php」、絶対パスや「https://」で始まるURLも指定可能)
 
 ZIZAI_CAPTCHA_IMAGE_PATH
-　認証画像を出力するPHPファイルの相対パス(通常は「image.php」)
+　認証画像を出力するPHPファイルのパス(通常は「image.php」、絶対パスや「https://」で始まるURLも指定可能)
 
 ZIZAI_CAPTCHA_RELOAD_IMAGE_DARK
-　zizai_captcha_get_htmlが出力する再読み込みボタンの黒いアイコン画像(通常は「icons/reload_bk.webp」)
+　zizai_captcha_get_htmlが出力する再読み込みボタンの黒いアイコン画像(通常は「icons/reload_bk.webp」、Base64エンコードした画像ファイルの埋め込みも可能)
 
 ZIZAI_CAPTCHA_RELOAD_IMAGE_LIGHT
-　zizai_captcha_get_htmlが出力する再読み込みボタンの白いアイコン画像(通常は「icons/reload_wh.webp"」)
+　zizai_captcha_get_htmlが出力する再読み込みボタンの白いアイコン画像(通常は「icons/reload_wh.webp」、Base64エンコードした画像ファイルの埋め込みも可能)
 
 
 ████ 関数・クラス ████
