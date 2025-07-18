@@ -1,4 +1,4 @@
-/* Zizai CAPTCHA 23.10-2 */
+/* Zizai CAPTCHA 25.07-1 */
 
 const ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT = "generate_id.php";
 const ZIZAI_CAPTCHA_IMAGE_PATH = "image.php";
