@@ -16,6 +16,12 @@ var zizai_captcha_dir;
 }());
 
 function zizai_captcha_get_id (callback_func, args = null) {
+    if (ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT.startsWith("/") || ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT.startsWith("https://")) {
+        var endpoint_path = ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT;
+    } else {
+        var endpoint_path = zizai_captcha_dir + ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT;
+    }
+    
     var request_obj = new XMLHttpRequest();
     
     request_obj.onreadystatechange = function () {
@@ -32,13 +38,17 @@ function zizai_captcha_get_id (callback_func, args = null) {
         }
     };
     
-    request_obj.open("GET", zizai_captcha_dir + ZIZAI_CAPTCHA_GENERATE_ID_ENDPOINT, true);
+    request_obj.open("GET", endpoint_path, true);
     request_obj.timeout = 10000;
     request_obj.send();
 }
 
 function zizai_captcha_get_image_path (session_id) {
-    return zizai_captcha_dir + ZIZAI_CAPTCHA_IMAGE_PATH + "/" + session_id;
+    if (ZIZAI_CAPTCHA_IMAGE_PATH.startsWith("/") || ZIZAI_CAPTCHA_IMAGE_PATH.startsWith("https://")) {
+        return ZIZAI_CAPTCHA_IMAGE_PATH + "/" + session_id;
+    } else {
+        return zizai_captcha_dir + ZIZAI_CAPTCHA_IMAGE_PATH + "/" + session_id;
+    }
 }
 
 function zizai_captcha_reload_image_callback (data, args) {
@@ -62,11 +72,7 @@ function zizai_captcha_get_html_callback (data, args) {
         rgb_sum += parseInt(args[4].substring(cnt * 2 + 1, cnt * 2 + 3), 16);
     }
     
-    if (rgb_sum > 382) {
-        var button_image = ZIZAI_CAPTCHA_RELOAD_IMAGE_DARK;
-    } else {
-        var button_image = ZIZAI_CAPTCHA_RELOAD_IMAGE_LIGHT;
-    }
+    var button_image = rgb_sum > 382 ? ZIZAI_CAPTCHA_RELOAD_IMAGE_DARK : ZIZAI_CAPTCHA_RELOAD_IMAGE_LIGHT;
     
     if (button_image.substring(0, 5) !== "data:") {
         button_image = zizai_captcha_dir + button_image;
