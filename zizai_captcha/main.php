@@ -262,7 +262,7 @@ class zizai_captcha {
         $img = imagecreatetruecolor($img_w, $img_h);
         imagecopyresampled($img, $imgs[$index_up], 0, 0, 0, 0, $img_w, $img_h, $img_w2, $img_h2);
         
-        imagewebp($img);
+        imagewebp($img, NULL, 60);
         
         return TRUE;
     }
